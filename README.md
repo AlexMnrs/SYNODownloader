@@ -21,8 +21,10 @@ PATH =  'videos'
 
 ### Paso 3: Ejecutar el programa
 
-Al ejecutar el programa se imprimirá en consola una lista de todos los archivos de la carpeta seleccionada.
+Al ejecutar el programa te pedirá que elijas una carpeta donde descargar los archivos. Si la carpeta existe, te preguntará si quieres utilizarla. Si no existe, la creará. 
 
-Selecciona el archivo a descargar introduciendo el número que le corresponda.
+Una vez configurada la carpeta de descargas, imprimirá en una lista de todos los archivos del NAS.
 
-El archivo se guardará en la raíz de la carpeta donde se encuentra el script.
+Selecciona el archivo a descargar introduciendo el número correspondiente.
+
+Espera a que se descargue y finalice el programa automáticamente.
