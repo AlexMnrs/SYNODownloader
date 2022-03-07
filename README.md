@@ -32,3 +32,4 @@ Espera a que se descargue y finalice el programa automáticamente.
 ### Problemas conocidos
 
 - Cuando termina la descarga el porcentaje de completado no es 100%.
+- Error al descargar archivos que contienen caracteres especiales en el nombre (el símbolo de la suma (+))
