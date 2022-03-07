@@ -1,5 +1,5 @@
 import sys
-from turtle import down
+from time import monotonic
 import requests
 import os
 
@@ -52,15 +52,25 @@ def download(url, path, file, sid):
         
         downloaded = 0
         total = int(total)
-        for chunk in download_request.iter_content(chunk_size=max(int(total/1000), 1024*1024)): #chunk_size=8192
+        start = last_print = monotonic()
+        for chunk in download_request.iter_content(chunk_size=max(int(total/1000), 1024*1024)):
             downloaded += len(chunk)
+            now = monotonic()
             if chunk:
                 tmp_file.write(chunk)
-                done = int(50*downloaded/total)
-                sys.stdout.write('\r[{}{}]'.format('█' * done, '.' * (50-done)))
+                done = int(100 * downloaded/total)
+                sys.stdout.write('\r[{}{}]'.format('█' * done, '.' * (100-done)))
                 sys.stdout.flush()
-
+                
+            if now - last_print > 1:
+                speed = round((downloaded / (now - start) / 1024) / 125)
+                sys.stdout.write(f' - [{done}%, {speed} Mbps]')
+                sys.stdout.flush()
+                last_print = now
+                
     sys.stdout.write('\n')
+    
+
     print("\n[*] Download has been completed.\n")
 
 def logout(url, api):
