@@ -28,3 +28,7 @@ Una vez configurada la carpeta de descargas, imprimirá en una lista de todos lo
 Selecciona el archivo a descargar introduciendo el número correspondiente.
 
 Espera a que se descargue y finalice el programa automáticamente.
+
+### Known Issues
+
+- Cuando termina la descarga el porcentaje de completado no es 100%.
