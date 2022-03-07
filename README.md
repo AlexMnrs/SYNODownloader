@@ -29,6 +29,6 @@ Selecciona el archivo a descargar introduciendo el número correspondiente.
 
 Espera a que se descargue y finalice el programa automáticamente.
 
-### Known Issues
+### Problemas conocidos
 
 - Cuando termina la descarga el porcentaje de completado no es 100%.
