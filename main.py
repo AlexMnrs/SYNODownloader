@@ -2,6 +2,7 @@ import sys
 from time import monotonic
 import requests
 import os
+import credentials
 
 #DO NOT MODIFY
 LOGIN_API    = 'webapi/auth.cgi?api=SYNO.API.Auth&version=3&method=login&account={}&passwd={}&session=FileStation&format=cookie'
@@ -10,10 +11,10 @@ LIST_API     = 'webapi/entry.cgi?api=SYNO.FileStation.List&version=2&method=list
 DOWNLOAD_API = 'webapi/entry.cgi?api=SYNO.FileStation.Download&version=2&method=download&path=/{}/{}&mode=open&_sid={}'
 
 # CHANGE THIS
-URL  =  'https://nas.quickconnect.to:65375/'
-USER =  'admin'
-PASS =  'password'
-PATH =  'your_folder'
+URL  =  credentials.URL
+USER =  credentials.USER
+PASS =  credentials.PASS
+PATH =  credentials.PATH
 
 def login(url, id, pw):
     sid = 0
