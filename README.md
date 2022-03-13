@@ -13,7 +13,7 @@ $ pip install -r requirements.txt
 El archivo credentials.py contiene los datos de acceso al NAS. Cámbialos por los tuyos:
 
 ```
-URL  =  'https://nas.quickconnect.to:65375/'
+URL  =  'https://nas.quickconnect.to:65375/webapi/entry.cgi'
 USER =  'admin'
 PASS =  'password'
 PATH =  'videos'
