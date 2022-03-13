@@ -8,9 +8,9 @@ Esta aplicación permite descargar archivos de un NAS de la marca Synology, conc
 $ pip install -r requirements.txt
 ```
 
-### Paso 2: Configurar las variables
+### Paso 2: Configurar las credenciales
 
-Antes de ejecutar el programa debes modificar las variables que contienen los datos de acceso a tu NAS de Synology.
+El archivo credentials.py contiene los datos de acceso al NAS. Cámbialos por los tuyos:
 
 ```
 URL  =  'https://nas.quickconnect.to:65375/'
@@ -21,15 +21,10 @@ PATH =  'videos'
 
 ### Paso 3: Ejecutar el programa
 
-Al ejecutar el programa te pedirá que elijas una carpeta donde descargar los archivos. Si la carpeta existe, te preguntará si quieres utilizarla. Si no existe, la creará. 
-
-Una vez configurada la carpeta de descargas, imprimirá en una lista de todos los archivos del NAS.
-
-Selecciona el archivo a descargar introduciendo el número correspondiente.
-
-Espera a que se descargue y finalice el programa automáticamente.
+```
+python main.py
+```
 
 ### Problemas conocidos
 
 - Cuando termina la descarga el porcentaje de completado no es 100%.
-- Error al descargar archivos que contienen caracteres especiales en el nombre (el símbolo de la suma (+))

@@ -4,13 +4,6 @@ import requests
 import os
 import credentials
 
-#DO NOT MODIFY
-LOGIN_API    = 'webapi/auth.cgi?api=SYNO.API.Auth&version=3&method=login&account={}&passwd={}&session=FileStation&format=cookie'
-LOGOUT_API   = 'webapi/auth.cgi?api=SYNO.API.Auth&version=1&method=logout&session=FileStation'
-LIST_API     = 'webapi/entry.cgi?api=SYNO.FileStation.List&version=2&method=list&additional=&folder_path=/{}&_sid={}'
-DOWNLOAD_API = 'webapi/entry.cgi?api=SYNO.FileStation.Download&version=2&method=download&path=/{}/{}&mode=open&_sid={}'
-
-# CHANGE THIS
 URL  =  credentials.URL
 USER =  credentials.USER
 PASS =  credentials.PASS
@@ -18,16 +11,20 @@ PATH =  credentials.PATH
 
 def login(url, id, pw):
     sid = 0
-    response = requests.get(url+LOGIN_API.format(id, pw))
+    response = requests.get(url, 
+                            params={'api': 'SYNO.API.Auth', 'version': 3, 'method':'login','account':id, 'passwd': pw, 'session':'FileStation', 'format': 'cookie'})
     response_dict = response.json()
     sid = response_dict['data']['sid']
     return sid
 
 def list(url, path, sid):
-    list_files = requests.get(url+LIST_API.format(path, sid))
+    list_files = requests.get(url, 
+                            params={'api':'SYNO.FileStation.List', 'version': 2, 'method':'list','additional':'','folder_path':"/" + path, '_sid':sid}
+                            )
     response_dict = list_files.json()
     files = response_dict['data']['files']
 
+    # Get all content in the path is not a directory
     index = 1
     tmp_files = {}
     for file in files:
@@ -35,16 +32,20 @@ def list(url, path, sid):
             tmp_files[index] = file['name']
             index += 1
     
+    # Print all files found in the path 
     for key, value in tmp_files.items():
         print("[{}] {}".format(str(key), str(value)))
     
     return tmp_files
 
 def download(url, path, file, sid):
-    download_request = requests.get(url+DOWNLOAD_API.format(path, file, sid), stream=True)
+    download_request = requests.get(url, 
+                                    params={'api':'SYNO.FileStation.Download', 'version': 2, 'method':'download', 'path':"/"+path+"/"+file, 'mode':'open', '_sid':sid},
+                                    stream=True)
     code = download_request.status_code
     total = download_request.headers.get('content-length')
 
+    # Check if the file requested to download exists 
     if total is None or code != 200:
         print("[*] The file doesn't exist.")
         return False
@@ -74,8 +75,9 @@ def download(url, path, file, sid):
 
     print("\n[*] Download has been completed.\n")
 
-def logout(url, api):
-    response = requests.get(url+api)
+def logout(url):
+    response = requests.get(url, 
+                            params={'api': 'SYNO.API.Auth', 'version': 1, 'method':'logout', 'session':'FileStation'})
     return response
 
 def currDir():
@@ -124,6 +126,6 @@ if __name__ == '__main__':
         except ValueError:
             print("[*] Invalid answer.")
             sys.exit(1) 
-        logout(URL, LOGOUT_API)
+        logout(URL)
     except KeyboardInterrupt:
         print("\n\n[*] Download interrupted!")
