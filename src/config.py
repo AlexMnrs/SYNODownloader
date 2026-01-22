@@ -1,8 +1,24 @@
+"""
+    .SYNOPSIS
+        Gestiona la configuración de la aplicación cargando variables de entorno.
+
+    .DESCRIPTION
+        Este módulo define la clase Config, encargada de leer y validar las variables
+        de entorno necesarias para la conexión con el NAS de Synology.
+        Utiliza python-dotenv para cargar configuraciones desde un archivo .env.
+
+    .NOTES
+        Script Name: config.py
+        Author:      Alex Monrás
+        Created:     2026-01-22
+        Version:     1.1.0
+"""
+
 import os
 from dotenv import load_dotenv
 from typing import Optional
 
-# Load environment variables from .env file
+# Cargar variables de entorno desde el archivo .env
 load_dotenv()
 
 class Config:
@@ -13,11 +29,11 @@ class Config:
 
     @classmethod
     def validate(cls) -> Optional[str]:
-        """Validates that all required configuration variables are set."""
+        """Valida que todas las variables de configuración requeridas estén establecidas."""
         if not cls.SYNO_URL:
-            return "SYNO_URL is not set in environment or .env file."
+            return "SYNO_URL no está configurado en el entorno o archivo .env."
         if not cls.SYNO_USER:
-            return "SYNO_USER is not set in environment or .env file."
+            return "SYNO_USER no está configurado en el entorno o archivo .env."
         if not cls.SYNO_PASSWORD:
-            return "SYNO_PASSWORD is not set in environment or .env file."
+            return "SYNO_PASSWORD no está configurado en el entorno o archivo .env."
         return None

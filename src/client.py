@@ -1,3 +1,19 @@
+"""
+    .SYNOPSIS
+        Cliente API para interactuar con Synology FileStation.
+
+    .DESCRIPTION
+        Este módulo contiene la clase SynologyClient, que gestiona la autenticación,
+        el listado de archivos y la descarga de contenidos desde un NAS Synology
+        utilizando la API de FileStation.
+
+    .NOTES
+        Script Name: client.py
+        Author:      Alex Monrás
+        Created:     2026-01-22
+        Version:     1.1.0
+"""
+
 import requests
 import os
 from pathlib import Path
@@ -15,7 +31,7 @@ class SynologyClient:
         self.session = requests.Session()
 
     def login(self) -> bool:
-        """Authenticates with the Synology NAS."""
+        """Autentica con el NAS de Synology."""
         try:
             params = {
                 'api': 'SYNO.API.Auth',
@@ -34,18 +50,18 @@ class SynologyClient:
                 self.sid = data['data']['sid']
                 return True
             else:
-                print(f"Login failed: {data}")
+                print(f"Inicio de sesión fallido: {data}")
                 return False
         except Exception as e:
-            print(f"Login error: {e}")
+            print(f"Error de inicio de sesión: {e}")
             return False
 
     def list_files(self, remote_path: str) -> Dict[int, str]:
-        """Lists files in a remote directory, excluding subdirectories."""
+        """Lista archivos en un directorio remoto, excluyendo subdirectorios."""
         if not self.sid:
-            raise Exception("Not logged in")
+            raise Exception("No hay sesión iniciada")
 
-        # Ensure remote path starts with /
+        # Asegurar que la ruta remota comience con /
         if not remote_path.startswith("/"):
             remote_path = "/" + remote_path
 
@@ -64,7 +80,7 @@ class SynologyClient:
             data = response.json()
             
             if not data.get('success'):
-                print(f"List files failed: {data}")
+                print(f"Fallo al listar archivos: {data}")
                 return {}
 
             files = data['data']['files']
@@ -77,18 +93,18 @@ class SynologyClient:
             
             return file_map
         except Exception as e:
-            print(f"List files error: {e}")
+            print(f"Error al listar archivos: {e}")
             return {}
 
     def download_file(self, remote_path: str, filename: str) -> bool:
-        """Downloads a file with a progress bar."""
+        """Descarga un archivo mostrando una barra de progreso."""
         if not self.sid:
-            raise Exception("Not logged in")
+            raise Exception("No hay sesión iniciada")
             
         full_remote_path = f"/{remote_path.strip('/')}/{filename}"
         local_file_path = self.download_path / filename
 
-        # Create download directory if it doesn't exist
+        # Crear directorio de descarga si no existe
         self.download_path.mkdir(parents=True, exist_ok=True)
 
         params = {
@@ -117,14 +133,14 @@ class SynologyClient:
                         bar.update(size)
             return True
         except Exception as e:
-            print(f"Download error: {e}")
-            # Clean up partial file
+            print(f"Error de descarga: {e}")
+            # Limpiar archivo parcial
             if local_file_path.exists():
                 local_file_path.unlink()
             return False
 
     def logout(self):
-        """Logs out from the session."""
+        """Cierra la sesión actual."""
         if not self.sid:
             return
 
